@@ -50,7 +50,7 @@
     function numform($price) {
         $price = ceil($price);
         if ($price >= 1000) {
-            $price = number_format($price,0,'',' ');
+            $price = number_format($price,0,'',' ').' ₽';
         }
         return $price;
     }
