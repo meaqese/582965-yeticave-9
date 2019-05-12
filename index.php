@@ -48,6 +48,13 @@
         ]
     ];
 
+    /* DATE */
+    $now = date_create("now");
+    $midnight = date_create("tomorrow midnight");
+
+    $diff = date_diff($now,$midnight);
+    $hours = date_interval_format($diff,'%H:%I');
+
     /*NUMFORM*/
     function numform($price) {
         $price = ceil($price);
@@ -61,6 +68,7 @@
         [
             'category' => $goodnamelist,
             'list' => $goodlist,
+            'hours' => $hours,
         ]);
     $layout = include_template("layout.php",
         [
