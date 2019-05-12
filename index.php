@@ -47,7 +47,6 @@
             "picture"=>"img/lot-6.jpg",
         ]
     ];
-    $listcount = count($goodnamelist);
 
     /*NUMFORM*/
     function numform($price) {
@@ -60,8 +59,6 @@
 
     $page_content = include_template("index.php",
         [
-            'i' => 1,
-            'listcount' => $listcount,
             'category' => $goodnamelist,
             'list' => $goodlist,
         ]);
@@ -72,8 +69,6 @@
             'user_name' => $user_name,
             'is_auth' => $is_auth,
             /*Cycle*/
-            'i' => 1,
-            'listcount' => $listcount,
             'goodnamelist' => $goodnamelist,
             'goodlist' => $goodlist,
         ]);

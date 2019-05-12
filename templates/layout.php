@@ -24,7 +24,7 @@
             <nav class="user-menu">
                 <?php if ($is_auth) : ?>
                     <div class="user-menu__logged">
-                        <p><?php echo $user_name;?></p>
+                        <p><?php echo htmlspecialchars($user_name);?></p>
                         <a class="user-menu__bets" href="pages/my-bets.html">Мои ставки</a>
                         <a class="user-menu__logout" href="#">Выход</a>
                     </div>
@@ -53,9 +53,11 @@
 <footer class="main-footer">
     <nav class="nav">
         <ul class="nav__list container">
-            <?php while ($i < $listcount): ?>
+            <?php
+            $i = 0;
+            while ($i < count($goodnamelist)): ?>
                 <li class="nav__item">
-                    <a href="pages/all-lots.html"><?php echo $goodnamelist[$i];$i++; ?></a>
+                    <a href="pages/all-lots.html"><?php echo htmlspecialchars($goodnamelist[$i]);$i++; ?></a>
                 </li>
             <?php endwhile; ?>
         </ul>
