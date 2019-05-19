@@ -8,8 +8,8 @@ CREATE TABLE `users` (
   `regdate` DATETIME,
   `email` char(120),
   `name` char(120),
-  `password` char,
-  `avatar` char,
+  `password` char(120),
+  `avatar` char(120),
   `contacts` char(120)
 );
 
@@ -24,19 +24,19 @@ CREATE TABLE `lot` (
   `author_id` int(120),
   `winner_id` int(120),
   `category_id` int(120),
-  `datedd` DATETIME,
+  `dateadd` DATETIME,
   `lotname` char(120),
-  `lotdesc` text,
-  `imgurl` char,
+  `lotdesc` text(120),
+  `imgurl` char(120),
   `firstprice` int (60),
-  `enddate` DATETIME,
-  `bidstep` int
+  `enddate` TIMESTAMP ,
+  `bidstep` int(60)
 );
 
 CREATE TABLE `bids` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
   `bidate` DATETIME,
-  `offer` int,
+  `offer` int(60),
   `user_id` int(120),
   `lot_id` int(120)
 );
