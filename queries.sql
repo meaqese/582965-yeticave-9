@@ -33,10 +33,12 @@ SELECT `name` FROM `categories`;
 
 /* NEW AND OPEN LOTS */
 
-SELECT `lotname`,`firstprice`,`imgurl`,cary.name
+SELECT `lotname`,`firstprice`,`imgurl`,cary.name, MAX(bids.offer)
 FROM `lot`
 INNER JOIN `categories` cary ON cary.id = lot.category_id
+INNER JOIN `bids` ON bids.lot_id = lot.id
 WHERE `enddate` > TIMESTAMP(NOW())
+GROUP BY bids.lot_id
 ORDER BY `dateadd` DESC;
 
 /* LOT FROM ID */

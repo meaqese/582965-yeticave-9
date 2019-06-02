@@ -6,7 +6,7 @@ USE `yeticave`;
 CREATE TABLE `users` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
   `regdate` DATETIME,
-  `email` char(120),
+  `email` char(120) UNIQUE ,
   `name` char(120),
   `password` char(120),
   `avatar` char(120),
