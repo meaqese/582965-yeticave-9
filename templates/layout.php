@@ -51,15 +51,13 @@
 </div>
 
 <footer class="main-footer">
-    <nav class="nav">
+    <nav class="nav ">
         <ul class="nav__list container">
-            <?php
-            $i = 0;
-            while ($i < count($goodnamelist)): ?>
+            <? foreach($categories as $categorylist): ?>
                 <li class="nav__item">
-                    <a href="pages/all-lots.html"><?php echo htmlspecialchars($goodnamelist[$i]);$i++; ?></a>
+                    <a href="pages/all-lots.html"><?php echo htmlspecialchars($categorylist['name']); ?></a>
                 </li>
-            <?php endwhile; ?>
+            <? endforeach; ?>
         </ul>
     </nav>
     <div class="main-footer__bottom container">

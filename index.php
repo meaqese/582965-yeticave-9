@@ -1,6 +1,18 @@
 <?php
     require "helpers.php";
 
+    /* DATABASE CONNECT */
+    $db = mysqli_connect('localhost','mysql','mysql','yeticave') or die(mysqli_error($db));
+    mysqli_set_charset($db,'utf8');
+
+    /* Query for list of lots */
+    $getLotslist = mysqli_query($db, "SELECT `lotname`,cary.name,`imgurl`,`firstprice` FROM `lot` INNER JOIN `categories` cary ON cary.id = lot.category_id WHERE `enddate` > TIMESTAMP(NOW()) ORDER BY `dateadd` DESC;");
+    $lotlist = mysqli_fetch_all($getLotslist,MYSQLI_ASSOC);
+
+
+    /* Query for list of categories */
+    $getCategorieslist = mysqli_query($db,"SELECT * FROM `categories`");
+    $categorieslist = mysqli_fetch_all($getCategorieslist,MYSQLI_ASSOC);
 
     $is_auth = rand(0, 1);
 
@@ -48,14 +60,14 @@
         ]
     ];
 
-    /* DATE */
+    #DATE#
     $now = date_create("now");
     $midnight = date_create("tomorrow midnight");
 
     $diff = date_diff($now,$midnight);
     $hours = date_interval_format($diff,'%H:%I');
 
-    /*NUMFORM*/
+    #NUMFORM#
     function numform($price) {
         $price = ceil($price);
         if ($price >= 1000) {
@@ -66,10 +78,11 @@
 
     $page_content = include_template("index.php",
         [
-            'category' => $goodnamelist,
-            'list' => $goodlist,
-            'hours' => $hours,
-        ]);
+            'category' => $categorieslist,
+            'list' => $lotlist,
+            'hours' => $hours
+        ]
+    );
     $layout = include_template("layout.php",
         [
             'title' => 'Главная',
@@ -77,8 +90,8 @@
             'user_name' => $user_name,
             'is_auth' => $is_auth,
             /*Cycle*/
-            'goodnamelist' => $goodnamelist,
-            'goodlist' => $goodlist,
+            'categories' => $categorieslist,
         ]);
+
     print $layout;
 ?>
