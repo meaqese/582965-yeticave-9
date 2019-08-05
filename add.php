@@ -49,8 +49,8 @@
 
             $periodinsec = strtotime($lot['enddate']) - strtotime("now");
 
-            if (($periodinsec / 3600) < 24) {
-                $error['enddate'] = $dict['enddate'].' должна быть как минимум на день дольше';
+            if (($periodinsec / 3600) < 24 && !is_date_valid($lot['enddate'])) {
+                $error['enddate'] = $dict['enddate'].' должна быть как минимум на день дольше и иметь формат ГГГГ-ММ-ДД';
             }
 
             /* Form Validation [End]
@@ -100,7 +100,7 @@
                         'error' => $error,
                         'dict' => $dict,
                         'categories' => $Categorylist,
-                        'lot' => $lot
+                        'lot' => $lot,
                     ]
                 );
             }
