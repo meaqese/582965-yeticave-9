@@ -19,7 +19,6 @@
 
 	$getLotslist = mysqli_query($db,$getLotslistquery);
 	$Lotslist = mysqli_fetch_assoc($getLotslist);
-
 	/**
 	 * Get bids list
 	 */

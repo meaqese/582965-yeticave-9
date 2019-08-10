@@ -83,7 +83,7 @@
                         'dict' => $dict,
                         'categories' => $Categorylist,
                         'lot' => $lot,
-                    ]
+                    ]  
                 );
             }
             else {

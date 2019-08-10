@@ -71,4 +71,3 @@
 		<button type="submit" class="button">Добавить лот</button>
 	</form>
 </main>
-

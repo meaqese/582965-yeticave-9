@@ -1,6 +1,7 @@
 <?php
     $bidscount = mysqli_num_rows($bids);
 ?>
+
 <main>
 	<nav class="nav">
 		<ul class="nav__list container">
