@@ -177,5 +177,10 @@
             'image/jpeg' => '.jpg'
         ];
 
-        return $extensions[$mime_type];
+	    if ($mime_type == 'image/png' || "image/jpeg") {
+            return $extensions[$mime_type];
+        }
+	    else {
+	        return false;
+        }
     }

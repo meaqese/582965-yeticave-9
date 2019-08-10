@@ -46,10 +46,9 @@
             }
 
 
-
             $periodinsec = strtotime($lot['enddate']) - strtotime("now");
 
-            if (($periodinsec / 3600) < 24 && !is_date_valid($lot['enddate'])) {
+            if (($periodinsec / 3600) < 24 || !is_date_valid($lot['enddate'])) {
                 $error['enddate'] = $dict['enddate'].' должна быть как минимум на день дольше и иметь формат ГГГГ-ММ-ДД';
             }
 
@@ -65,26 +64,9 @@
 
 
 
-                if ($finfo ==  'image/png' || 'image/jpeg') {
+                if (mime_to_ext($finfo) != '') {
                     $ext = mime_to_ext($finfo);
                     $newpath = 'uploads/'.uniqid().$ext;
-                    move_uploaded_file($tmp_name, $newpath);
-
-                    $sqlmove = "INSERT INTO `lot` (`category_id`,`dateadd`,`lotname`,`lotdesc`,`imgurl`,`firstprice`,`enddate`,`bidstep`) VALUES (?,NOW(),?,?,?,?,?,?)";
-
-                    $stmt = db_get_prepare_stmt($db,$sqlmove,[
-                        $lot['category'],
-                        $lot['name'],
-                        $lot['description'],
-                        $newpath,
-                        $lot['firstprice'],
-                        $lot['enddate'],
-                        $lot['bidstep']
-                        ]);
-                    $res = mysqli_stmt_execute($stmt);
-
-                    $ins = mysqli_insert_id($db);
-                    header("Location: /lot.php?id=$ins");
                 }
                 else {
                     $error['file'] = 'Изображение должно иметь расширение типа JPG/JPEG или PNG';
@@ -104,9 +86,27 @@
                     ]
                 );
             }
+            else {
+                move_uploaded_file($tmp_name, $newpath);
+
+                $sqlmove = "INSERT INTO `lot` (`author_id`,`category_id`,`dateadd`,`lotname`,`lotdesc`,`imgurl`,`firstprice`,`enddate`,`bidstep`) VALUES (?,?,NOW(),?,?,?,?,?,?)";
+
+                $stmt = db_get_prepare_stmt($db,$sqlmove,[
+                    1,
+                    $lot['category'],
+                    $lot['name'],
+                    $lot['description'],
+                    $newpath,
+                    $lot['firstprice'],
+                    $lot['enddate'],
+                    $lot['bidstep']
+                ]);
+                $res = mysqli_stmt_execute($stmt);
+
+                $ins = mysqli_insert_id($db);
+                header("Location: /lot.php?id=$ins");
+            }
     }
-
-
 
     $layout = include_template("layout.php",
         [
@@ -117,5 +117,8 @@
             'categories' => $Categorylist
         ]
     );
-    print $layout;
+
+	if (empty($stmt)) {
+        print $layout;
+    }
 ?>
