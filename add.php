@@ -2,11 +2,25 @@
 	require 'helpers.php';
 	require 'config.php';
 
-    $add_lot = include_template("add-lot.php",
-        [
-            'categories' => $Categorylist
-        ]
-    );
+	if ($_SERVER['REQUEST_METHOD'] == 'GET'){
+        $add_lot = include_template("add-lot.php",
+            [
+                'categories' => $Categorylist
+            ]
+        );
+
+        $layout = include_template("layout.php",
+            [
+                'title' => 'Добавление лота',
+                'content' => $add_lot,
+                'is_auth' => $is_auth,
+                'user_name' => $user_name,
+                'categories' => $Categorylist
+            ]
+        );
+
+        print $layout;
+	}
 
 	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $lot = $_POST['lot'];
@@ -38,7 +52,7 @@
                 }
             }
 
-            $category_option_id = $lot['category'];
+            $category_option_id = intval($lot['category']);
 
             $category_id_query = mysqli_query($db,"SELECT * FROM `categories` WHERE `id` = '$category_option_id'");
             if (!mysqli_num_rows($category_id_query)) {
@@ -46,10 +60,12 @@
             }
 
 
-            $periodinsec = strtotime($lot['enddate']) - strtotime("now");
+            if (is_date_valid($lot['enddate'])) {
+                $periodinsec = strtotime($lot['enddate']) - strtotime("now");
 
-            if (($periodinsec / 3600) < 24 || !is_date_valid($lot['enddate'])) {
-                $error['enddate'] = $dict['enddate'].' должна быть как минимум на день дольше и иметь формат ГГГГ-ММ-ДД';
+                if (($periodinsec / 3600) < 24) {
+                    $error['enddate'] = $dict['enddate'] . ' должна быть как минимум на день дольше и иметь формат ГГГГ-ММ-ДД';
+                }
             }
 
             /* Form Validation [End]
@@ -64,8 +80,7 @@
 
 
 
-                if (mime_to_ext($finfo) != '') {
-                    $ext = mime_to_ext($finfo);
+                if ($ext = mime_to_ext($finfo) != '') {
                     $newpath = 'uploads/'.uniqid().$ext;
                 }
                 else {
@@ -85,6 +100,18 @@
                         'lot' => $lot,
                     ]  
                 );
+
+                $layout = include_template("layout.php",
+                    [
+                        'title' => 'Добавление лота',
+                        'content' => $add_lot,
+                        'is_auth' => $is_auth,
+                        'user_name' => $user_name,
+                        'categories' => $Categorylist
+                    ]
+                );
+
+                print $layout;
             }
             else {
                 move_uploaded_file($tmp_name, $newpath);
@@ -108,17 +135,5 @@
             }
     }
 
-    $layout = include_template("layout.php",
-        [
-            'title' => 'Добавление лота',
-            'content' => $add_lot,
-            'is_auth' => $is_auth,
-            'user_name' => $user_name,
-            'categories' => $Categorylist
-        ]
-    );
 
-	if (empty($stmt)) {
-        print $layout;
-    }
 ?>

@@ -23,7 +23,7 @@
 		<div class="form__container-two">
 			<div class="form__item <?= (isset($error['name'])) ? 'form__item--invalid' : ''; ?>"> <!-- form__item--invalid -->
 				<label for="lot-name">Наименование <sup>*</sup></label>
-				<input id="lot-name" type="text" name="lot[name]" value="<?= strip_tags($form['name']); ?>" placeholder="Введите наименование лота">
+				<input id="lot-name" type="text" name="lot[name]" value="<?= htmlspecialchars(strip_tags($form['name'])); ?>" placeholder="Введите наименование лота">
 				<span class="form__error">Введите наименование лота</span>
 			</div>
 			<div class="form__item <?= (isset($error['category'])) ? 'form__item--invalid' : ''; ?>">
@@ -31,7 +31,7 @@
 				<select id="category" name="lot[category]">
 					<option value="0">Выберите категорию</option>
                     <?php foreach ($categories as $category) : ?>
-					<option value="<?= $category['id'] ?>"<?= ($category['id'] == strip_tags($form['category'])) ? 'selected' : ''; ?> ><?= $category['name']; ?></option>
+					<option value="<?= $category['id'] ?>"<?= ($category['id'] == htmlspecialchars(strip_tags($form['category']))) ? 'selected' : ''; ?> ><?= $category['name']; ?></option>
                     <?php endforeach; ?>
 				</select>
 				<span class="form__error"><?= $error['category']; ?></span>
@@ -39,7 +39,7 @@
 		</div>
 		<div class="form__item form__item--wide <?= (isset($error['description'])) ? 'form__item--invalid' : ''; ?>">
 			<label for="message">Описание <sup>*</sup></label>
-			<textarea id="message" name="lot[description]" placeholder="Напишите описание лота"><?= strip_tags($form['description']); ?></textarea>
+			<textarea id="message" name="lot[description]" placeholder="Напишите описание лота"><?= htmlspecialchars(strip_tags($form['description'])); ?></textarea>
 			<span class="form__error">Напишите описание лота</span>
 		</div>
 		<div class="form__item form__item--file <?= (isset($error['file'])) ? 'form__item--invalid' : ''; ?>">
@@ -53,17 +53,17 @@
 		<div class="form__container-three">
 			<div class="form__item form__item--small <?= (isset($error['firstprice'])) ? 'form__item--invalid' : ''; ?>">
 				<label for="lot-rate">Начальная цена <sup>*</sup></label>
-				<input id="lot-rate" type="text" name="lot[firstprice]" value="<?= strip_tags($form['firstprice']); ?>" placeholder="0">
+				<input id="lot-rate" type="text" name="lot[firstprice]" value="<?= htmlspecialchars(strip_tags($form['firstprice'])); ?>" placeholder="0">
 				<span class="form__error"><?= $error['firstprice']; ?></span>
 			</div>
 			<div class="form__item form__item--small <?= (isset($error['bidstep'])) ? 'form__item--invalid' : ''; ?>">
 				<label for="lot-step">Шаг ставки <sup>*</sup></label>
-				<input id="lot-step" type="text" name="lot[bidstep]" value="<?= strip_tags($form['bidstep']); ?>" placeholder="0">
+				<input id="lot-step" type="text" name="lot[bidstep]" value="<?= htmlspecialchars(strip_tags($form['bidstep'])); ?>" placeholder="0">
 				<span class="form__error"><?= $error['bidstep']; ?></span>
 			</div>
 			<div class="form__item <?= (isset($error['enddate'])) ? 'form__item--invalid' : ''; ?>">
 				<label for="lot-date">Дата окончания торгов <sup>*</sup></label>
-				<input class="form__input-date" id="lot-date" type="text" name="lot[enddate]" value="<?= strip_tags($form['enddate']); ?>" placeholder="Введите дату в формате ГГГГ-ММ-ДД">
+				<input class="form__input-date" id="lot-date" type="text" name="lot[enddate]" value="<?= htmlspecialchars(strip_tags($form['enddate'])); ?>" placeholder="Введите дату в формате ГГГГ-ММ-ДД">
 				<span class="form__error"><?= $error['enddate']; ?></span>
 			</div>
 		</div>
