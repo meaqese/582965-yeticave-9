@@ -6,11 +6,6 @@
     $getLotslist = mysqli_query($db, "SELECT `lotname`,cary.name,`imgurl`,`firstprice`,lot.id FROM `lot` INNER JOIN `categories` cary ON cary.id = lot.category_id WHERE `enddate` > TIMESTAMP(NOW()) ORDER BY `dateadd` DESC;");
     $lotlist = mysqli_fetch_all($getLotslist,MYSQLI_ASSOC);
 
-
-    /* Query for list of categories */
-    $getCategorieslist = mysqli_query($db,"SELECT * FROM `categories`");
-    $categorieslist = mysqli_fetch_all($getCategorieslist,MYSQLI_ASSOC);
-
     #NUMFORM#
     function numform($price) {
         $price = ceil($price);
@@ -22,9 +17,9 @@
 
     $page_content = include_template("index.php",
         [
-            'category' => $categorieslist,
+            'category' => $Categorylist,
             'list' => $lotlist,
-            'hours' => $hours
+            'interval' => $interval
         ]
     );
     $layout = include_template("layout.php",
@@ -34,7 +29,7 @@
             'user_name' => $user_name,
             'is_auth' => $is_auth,
             /*Cycle*/
-            'categories' => $categorieslist,
+            'categories' => $Categorylist
         ]);
 
     print $layout;
