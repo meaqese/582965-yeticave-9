@@ -2,31 +2,32 @@
 	require 'helpers.php';
 	require 'config.php';
 
-	if ($_SERVER['REQUEST_METHOD'] == 'GET'){
-        $add_lot = include_template("add-lot.php",
-            [
-                'categories' => $Categorylist
-            ]
-        );
+	if (isset($_SESSION['email'])) {
+        if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+            $add_lot = include_template("add-lot.php",
+                [
+                    'categories' => $Categorylist
+                ]
+            );
 
-        $layout = include_template("layout.php",
-            [
-                'title' => 'Добавление лота',
-                'content' => $add_lot,
-                'is_auth' => $is_auth,
-                'user_name' => $user_name,
-                'categories' => $Categorylist
-            ]
-        );
+            $layout = include_template("layout.php",
+                [
+                    'title' => 'Добавление лота',
+                    'content' => $add_lot,
+                    'is_auth' => $is_auth,
+                    'user_name' => $user_name,
+                    'categories' => $Categorylist
+                ]
+            );
 
-        print $layout;
-	}
+            print $layout;
+        }
 
-	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $lot = $_POST['lot'];
             $error = [];
-            $required_fields = ['name','category','description','firstprice','bidstep','enddate'];
-            $intreq_fields = ['firstprice','bidstep'];
+            $required_fields = ['name', 'category', 'description', 'firstprice', 'bidstep', 'enddate'];
+            $intreq_fields = ['firstprice', 'bidstep'];
             $dict = [
                 'file' => 'Картинка',
                 'name' => 'Название',
@@ -47,16 +48,16 @@
             }
 
             foreach ($intreq_fields as $intfield) {
-                if (!filter_var($lot[$intfield],FILTER_VALIDATE_INT)) {
-                    $error[$intfield] = $dict[$intfield].' должен быть целым и больше нуля';
+                if (!filter_var($lot[$intfield], FILTER_VALIDATE_INT)) {
+                    $error[$intfield] = $dict[$intfield] . ' должен быть целым и больше нуля';
                 }
             }
 
             $category_option_id = intval($lot['category']);
 
-            $category_id_query = mysqli_query($db,"SELECT * FROM `categories` WHERE `id` = '$category_option_id'");
+            $category_id_query = mysqli_query($db, "SELECT * FROM `categories` WHERE `id` = '$category_option_id'");
             if (!mysqli_num_rows($category_id_query)) {
-                $error['category'] = $dict['category'].' не существует';
+                $error['category'] = $dict['category'] . ' не существует';
             }
 
 
@@ -76,18 +77,15 @@
                 $filename = $_FILES['lot-img']['name'];
 
                 $filemimetype = finfo_open(FILEINFO_MIME_TYPE);
-                $finfo = finfo_file($filemimetype,$tmp_name);
-
+                $finfo = finfo_file($filemimetype, $tmp_name);
 
 
                 if ($ext = mime_to_ext($finfo) != '') {
-                    $newpath = 'uploads/'.uniqid().$ext;
-                }
-                else {
+                    $newpath = 'uploads/' . uniqid() . $ext;
+                } else {
                     $error['file'] = 'Изображение должно иметь расширение типа JPG/JPEG или PNG';
                 }
-            }
-            else {
+            } else {
                 $error['file'] = 'Вы не загрузили картинку';
             }
 
@@ -98,7 +96,7 @@
                         'dict' => $dict,
                         'categories' => $Categorylist,
                         'lot' => $lot,
-                    ]  
+                    ]
                 );
 
                 $layout = include_template("layout.php",
@@ -112,13 +110,12 @@
                 );
 
                 print $layout;
-            }
-            else {
+            } else {
                 move_uploaded_file($tmp_name, $newpath);
 
                 $sqlmove = "INSERT INTO `lot` (`author_id`,`category_id`,`dateadd`,`lotname`,`lotdesc`,`imgurl`,`firstprice`,`enddate`,`bidstep`) VALUES (?,?,NOW(),?,?,?,?,?,?)";
 
-                $stmt = db_get_prepare_stmt($db,$sqlmove,[
+                $stmt = db_get_prepare_stmt($db, $sqlmove, [
                     1,
                     $lot['category'],
                     $lot['name'],
@@ -133,7 +130,10 @@
                 $ins = mysqli_insert_id($db);
                 header("Location: /lot.php?id=$ins");
             }
+        }
     }
-
-
+	else {
+	    http_response_code('403');
+	    //header('Location: /login.php');
+    }
 ?>

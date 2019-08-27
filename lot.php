@@ -1,4 +1,5 @@
 <?php
+    session_start();
 	require 'helpers.php';
 	require 'config.php';
 
@@ -39,7 +40,6 @@
             /**
              * Include templates from /templates
              */
-
             $lot_page = include_template("lot.php", [
                 'categories' => $Categorylist,
                 'lots' => $Lotslist,
@@ -47,16 +47,24 @@
                 'bids' => $bidsquery
             ]);
 
-            $layout = include_template("layout.php", [
-                'title' => $Lotslist['lotname'],
-                'content' => $lot_page,
-                'user_name' => $user_name,
-                'is_auth' => $is_auth,
-                /*Cycle*/
-                'categories' => $Categorylist,
-            ]);
-
-            print($layout);
+            if (isset($_SESSION['email'])) {
+                $layout = include_template("layout.php", [
+                    'title' => $Lotslist['lotname'],
+                    'content' => $lot_page,
+                    'is_auth' => true,
+                    'categories' => $Categorylist
+                ]);
+            }
+            else {
+                $layout = include_template("layout.php", [
+                    'title' => $Lotslist['lotname'],
+                    'content' => $lot_page,
+                    'is_auth' => false,
+                    /*Cycle*/
+                    'categories' => $Categorylist
+                ]);
+            }
+            print $layout;
         }
         else {
             $lot_errors[] = 'ID лота отсутствует в базе данных';
@@ -66,7 +74,7 @@
         $lot_errors[] = 'В строке запроса отсутсвует ID лота';
     }
 
-    if ($lot_errors[0]) {
+    if (count($lot_errors)) {
         http_response_code('404');
     }
 
