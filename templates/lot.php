@@ -12,7 +12,7 @@
 		</ul>
 	</nav>
 	<section class="lot-item container">
-		<h2><?= $lots['lotname']; ?></h2>
+		<h2><?= htmlspecialchars($lots['lotname']); ?></h2>
 		<div class="lot-item__content">
 			<div class="lot-item__left">
 				<div class="lot-item__image">
@@ -35,6 +35,7 @@
 							Мин. ставка <span><?= htmlspecialchars($lots['bidstep'].'р'); ?></span>
 						</div>
 					</div>
+                    <?php if (isset($_SESSION['email'])): ?>
 					<form class="lot-item__form" action="" method="post" autocomplete="off">
 						<p class="lot-item__form-item form__item form__item--invalid">
 							<label for="cost">Ваша ставка</label>
@@ -43,7 +44,9 @@
 						</p>
 						<button type="submit" class="button">Сделать ставку</button>
 					</form>
-				</div>
+                    <?php endif; ?>
+                </div>
+
 				<div class="history">
 					<h3>История ставок (<span><?= htmlspecialchars($bidscount); ?></span>)</h3>
 					<table class="history__list">

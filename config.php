@@ -9,9 +9,6 @@
 	$db = mysqli_connect($db_data['host'],$db_data['user'],$db_data['password'],$db_data['base']) or die(mysqli_connect_error($db));
 	mysqli_set_charset($db,'utf8');
 
-	$is_auth = rand(0, 1);
-
-	$user_name = 'BigBoy'; // укажите здесь ваше имя
 
 
 	/**

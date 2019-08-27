@@ -1,4 +1,5 @@
 <?php
+    session_start();
     require "helpers.php";
     require 'config.php';
 
@@ -22,15 +23,28 @@
             'interval' => $interval
         ]
     );
-    $layout = include_template("layout.php",
-        [
-            'title' => 'Главная',
-            'content' => $page_content,
-            'user_name' => $user_name,
-            'is_auth' => $is_auth,
-            /*Cycle*/
-            'categories' => $Categorylist
-        ]);
+    if (isset($_SESSION['email'])) {
+        $layout = include_template("layout.php",
+            [
+                'title' => 'Главная',
+                'content' => $page_content,
+                'user_name' => $_SESSION['email'],
+                'is_auth' => true,
+                /*Cycle*/
+                'categories' => $Categorylist
+            ]
+        );
+    }
+    else {
+        $layout = include_template("layout.php",
+            [
+                'title' => 'Главная',
+                'content' => $page_content,
+                'is_auth' => false,
+                'categories' => $Categorylist
+            ]
+        );
+    }
 
     print $layout;
 ?>

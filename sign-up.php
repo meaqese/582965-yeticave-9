@@ -1,25 +1,30 @@
 <?php
+    session_start();
     require 'helpers.php';
     require 'config.php';
 
     if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-        $signup_template = include_template('sign-up-template.php',
-            [
-                'categories' => $Categorylist
-            ]
-        );
+        if (isset($_SESSION['email'])) {
+            header('Location: /index.php');
+        }
+        else {
+            $signup_template = include_template('sign-up-template.php',
+                [
+                    'categories' => $Categorylist
+                ]
+            );
 
-        $layout = include_template('layout.php',
-            [
-                'title' => 'Регистрация',
-                'content' => $signup_template,
-                'is_auth' => $is_auth,
-                'user_name' => $user_name,
-                'categories' => $Categorylist
-            ]
-        );
+            $layout = include_template('layout.php',
+                [
+                    'title' => 'Регистрация',
+                    'content' => $signup_template,
+                    'is_auth' => false,
+                    'categories' => $Categorylist
+                ]
+            );
 
-        print $layout;
+            print $layout;
+        }
     }
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -73,8 +78,7 @@
                 [
                     'title' => 'Регистрация',
                     'content' => $signup_template,
-                    'is_auth' => $is_auth,
-                    'user_name' => $user_name,
+                    'is_auth' => false,
                     'categories' => $Categorylist
                 ]
             );
